@@ -22,7 +22,13 @@ const bookingSchema = new Schema({
   comment: {
     type: String,
     required: false
+  },
+  confirmed: {
+    type: Boolean,
+    required: true
   }
-});
+},
+  { timestamps: true }
+);
 
 module.exports = mongoose.model('Booking', bookingSchema);
