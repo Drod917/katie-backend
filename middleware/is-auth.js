@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
     return next();
   }
 
-  //now verify token
+  // verify token
   try {
     decodedToken = jwt.verify(token, process.env.AUTH_SECRET);
   } catch (err) {
@@ -21,7 +21,7 @@ module.exports = (req, res, next) => {
     return next();
   }
 
-  //valid and verified token
+  // token is valid and verified
   req.isAuth = true;
   req.userId = decodedToken.userId;
   next();
