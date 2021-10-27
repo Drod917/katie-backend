@@ -11,7 +11,7 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  confirmed: [
+  confirmedBookings: [
     {
       type: Schema.Types.ObjectId,
       ref: 'ConfirmedBooking'
