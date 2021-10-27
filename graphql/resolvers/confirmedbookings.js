@@ -57,6 +57,9 @@ module.exports = {
       if (!booking) {
         throw new Error('Booking doesn\'t exist.');
       }
+      if (booking.confirmed == false) {
+        throw new Error('Booking not confirmed yet.');
+      }
       booking.confirmed = false;
       booking.save();
       
