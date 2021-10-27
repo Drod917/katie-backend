@@ -22,40 +22,68 @@ module.exports = {
       throw new Error('Unauthenticated!');
     }
     try {
-      const fetchedBooking = await Booking.findOne({ _id: bookingId });
-      const confirmedBooking = new ConfirmedBooking({
-        user: req.userId,
-        booking: fetchedBooking,
-      });
-      const result = await confirmedBooking.save();
+      const booking = await Booking.findById(bookingId);
+      if (!booking) {
+        throw new Error('Booking doesn\'t exist');
+      }
+      if (booking.confirmed) {
+        throw new Error('Booking already confirmed.')
+      }
+
+      booking.confirmed = true;
 
       const user = await User.findById(req.userId);
       if (!user) {
         throw new Error('User not found.');
       }
-      user.confirmed.push(confirmedBooking);
-      user.bookingHistory.push(confirmedBooking);
+      booking.user = user;
+      user.confirmedBookings.push(booking);
+      user.bookingHistory.push(booking);
       await user.save();
+      const result = await booking.save();
 
       return transformConfirmedBooking(result);
     } catch (err) {
       throw err;
     }
   },
-  cancelBooking: async ({ bookingId }, req) => {
+  // Unconfirms bookings
+  cancelConfirmedBooking: async ({ bookingId }, req) => {
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
     }
     try {
-      //first get the event for which the booking is to be deleted
-      const confirmedBooking = await ConfirmedBooking.findById(bookingId).populate('confirmedBooking');
-      const booking = transformBooking(confirmedBooking.booking);
+      const booking = await Booking.findById(bookingId);
+      if (!booking) {
+        throw new Error('Booking doesn\'t exist.');
+      }
+      booking.confirmed = false;
+      booking.save();
+      
+      //delete the booking
+      // await Booking.deleteOne({ _id: bookingId });
 
+      //return the event from which the booking was deleted
+      return transformBooking(booking);
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteBooking: async ({ bookingId }, req) => {
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    try {
+      const booking = await Booking.findById(bookingId);
+      if (!booking) {
+        throw new Error('Booking doesn\'t exist.');
+      }
+      
       //delete the booking
       await Booking.deleteOne({ _id: bookingId });
 
       //return the event from which the booking was deleted
-      return booking;
+      return transformBooking(booking);
     } catch (err) {
       throw err;
     }
