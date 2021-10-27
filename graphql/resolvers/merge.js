@@ -5,7 +5,7 @@ const User = require('../../models/user');
 const ConfirmedBooking = require('../../models/confirmed');
 const { dateToString } = require('../../helpers/date');
 
-//must get a list of events, a single event, ...
+// must get a list of bookings, a single event, etc...
 const bookingLoader = new DataLoader((bookingIds) => {
   return bookings(bookingIds);
 });

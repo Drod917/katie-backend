@@ -47,7 +47,6 @@ module.exports = {
       throw err;
     }
   },
-  // Unconfirms bookings
   cancelConfirmedBooking: async ({ bookingId }, req) => {
     if (!req.isAuth) {
       throw new Error('Unauthenticated!');
@@ -62,11 +61,8 @@ module.exports = {
       }
       booking.confirmed = false;
       booking.save();
-      
-      //delete the booking
-      // await Booking.deleteOne({ _id: bookingId });
 
-      //return the event from which the booking was deleted
+      // return the canceled booking information
       return transformBooking(booking);
     } catch (err) {
       throw err;
@@ -82,10 +78,10 @@ module.exports = {
         throw new Error('Booking doesn\'t exist.');
       }
       
-      //delete the booking
+      // delete the booking
       await Booking.deleteOne({ _id: bookingId });
 
-      //return the event from which the booking was deleted
+      // return the deleted booking information
       return transformBooking(booking);
     } catch (err) {
       throw err;
