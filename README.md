@@ -6,6 +6,7 @@
 
 # GraphQL-Event-Booking
 ### Author: Babak Chehraz
+### Fork Developed by Daniel Rodriguez
 <p>
   [<a target="blank" href="https://gatsby-event-booking.netlify.com/">Full Demo</a>]
   [<a target="blank" href="https://github.com/bchehraz/gatsby-event-booking">Front-end Github Source</a>]
