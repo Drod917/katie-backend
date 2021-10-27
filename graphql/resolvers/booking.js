@@ -3,15 +3,25 @@ const Booking = require('../../models/booking');
 const { transformBooking } = require('./merge');
 
 module.exports = {
-  bookings: async ({ freeOnly }) => {
+  bookings: async ({ _id, confirmed }) => {
     try {
       let bookings = [];
-      // if (freeOnly) {
-      //   events = await Event.find().where('price').equals(0);
-      // } else {
-      //   events = await Event.find();
-      // }
-      bookings = await Booking.find();
+      if (_id) {
+        let booking = await Booking.findById(_id);
+        if (!booking) {
+          throw new Error('Booking doesn\'t exist.');
+        }
+        return [transformBooking(booking)];
+      }
+      if (confirmed === true) {
+        bookings = await Booking.find({ confirmed: true })
+      }
+      else if (confirmed === false) {
+        bookings = await Booking.find({ confirmed: false });
+      }
+      else {
+        bookings = await Booking.find();
+      }
 
       return bookings.map(transformBooking);
     } catch(err) {
@@ -19,18 +29,13 @@ module.exports = {
     }
   },
   createBooking: async ({ bookingInput: { fullname, phone, date, service, comment }}, req) => {
-    // Remove authentication to create events
-    // if (!req.isAuth) {
-    //   throw new Error('Unauthenticated!');
-    // }
-
     const booking = new Booking({
       fullname: fullname,
       phone: phone,
       date: new Date(date),
       service: service,
-      comment: comment
-      // creator: req.userId,
+      comment: comment,
+      confirmed: false
     });
 
     try {
