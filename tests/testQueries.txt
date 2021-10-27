@@ -1,0 +1,97 @@
+mutation CreateUser($userInput:UserInput!){
+  createUser(userInput:$userInput){
+    userId
+    token
+    tokenExpiration
+    email
+  }
+}
+variables:
+"userInput": {
+    "email": "test@gmail.com",
+    "password": "poop"
+}
+returns:
+{
+  "data": {
+    "createUser": {
+      "userId": "61786bdf83a8f67e64b40029",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTc4NmJkZjgzYThmNjdlNjRiNDAwMjkiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWF0IjoxNjM1MjgxODg3LCJleHAiOjE2MzUyODU0ODd9.QAhSaADc1aD7i_N1mcP5irkv-z0KuaDXs-qUSicM-4I",
+      "tokenExpiration": 1,
+      "email": "test@gmail.com"
+    }
+  }
+}
+
+query {
+  login(email:"test@gmail.com",password:"poop") {
+    userId
+    token
+    tokenExpiration
+    email
+  }
+}
+returns:
+{
+  "data": {
+    "login": {
+      "userId": "617870c431171681204e9e09",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTc4NzBjNDMxMTcxNjgxMjA0ZTllMDkiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWF0IjoxNjM1MjgzMzQyLCJleHAiOjE2MzUyODY5NDJ9.xmzvuDhFOyhbKk-5HHRMYGUQxO7JEH7qoEtwMtQ4P7c",
+      "tokenExpiration": 1,
+      "email": "test@gmail.com"
+    }
+  }
+}
+
+mutation CreateBooking($bookingInput:BookingInput!){
+  createBooking(bookingInput:$bookingInput){
+    _id
+    fullname
+    phone
+    date
+    service
+    comment
+  }
+}
+variables:
+"bookingInput":{
+    "fullname":"TestFullname",
+    "phone":"9175793456",
+    "date": "10/26/2021, 4:41:26 PM",
+    "service": "TestService",
+    "comment": "TestComment"
+}
+returns:
+{
+  "data": {
+    "createBooking": {
+      "_id": "61786c6183a8f67e64b4002a",
+      "fullname": "TestFullname",
+      "phone": "9175793456",
+      "date": "2021-10-26T20:41:26.000Z",
+      "service": "TestService",
+      "comment": "TestComment"
+    }
+  }
+}
+
+(needs auth)
+mutation ConfirmBooking($id:ID!){
+  confirmBooking(bookingId:$id) {
+    booking {
+      fullname
+      phone
+      date
+      service
+      comment
+    }
+  }
+}
+returns:
+
+
+
+variables:
+{
+    "id" : "61786c6183a8f67e64b4002a"
+}

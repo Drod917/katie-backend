@@ -28,7 +28,7 @@ module.exports = {
       description: description,
       price: price,
       date: new Date(date),
-      creator: req.userId,
+      // creator: req.userId,
     });
 
     try {

@@ -1,35 +1,35 @@
 const DataLoader = require('dataloader');
 
-const Event = require('../../models/event');
-const User = require('../../models/user');
 const Booking = require('../../models/booking');
+const User = require('../../models/user');
+const ConfirmedBooking = require('../../models/confirmed');
 const { dateToString } = require('../../helpers/date');
 
 //must get a list of events, a single event, ...
-const eventLoader = new DataLoader((eventIds) => {
-  return events(eventIds);
+const bookingLoader = new DataLoader((bookingIds) => {
+  return bookings(bookingIds);
 });
 
 const userLoader = new DataLoader((userIds) => {
   return User.find({ _id: { $in: userIds } });
 });
 
-const events = async eventIds => {
+const bookings = async bookingIds => {
   try {
-    const events = await Event.find({ _id: { $in: eventIds } });
-    events.sort((a, b) => {
-      return eventIds.indexOf(a._id.toString()) - eventIds.indexOf(b._id.toString());
+    const bookings = await Booking.find({ _id: { $in: bookingIds } });
+    bookings.sort((a, b) => {
+      return bookingIds.indexOf(a._id.toString()) - bookingIds.indexOf(b._id.toString());
     })
-    return events.map(transformEvent);
+    return bookings.map(transformBooking);
   } catch (err) {
     throw err;
   }
 }
 
-const singleEvent = async eventId => {
+const singleBooking = async bookingId => {
   try {
-    const event = await eventLoader.load(eventId.toString());
-    return event;
+    const booking = await bookingLoader.load(bookingId.toString());
+    return booking;
   } catch (err) {
     throw err;
   }
@@ -41,30 +41,30 @@ const user = async userId => {
     return {
       ...user._doc,
       password: null,
-      createdEvents: () => eventLoader.loadMany(user._doc.createdEvents)
+      // createdEvents: () => eventLoader.loadMany(user._doc.createdEvents)
     };
   } catch (err) {
     throw err;
   }
 }
 
-const transformEvent = event => {
-  return {
-    ...event._doc,
-    date: dateToString(event._doc.date),
-    creator: user.bind(this, event.creator)
-  };
-};
-
 const transformBooking = booking => {
   return {
     ...booking._doc,
-    user: user.bind(this, booking._doc.user),
-    event: singleEvent.bind(this, booking._doc.event),
-    createdAt: dateToString(booking._doc.createdAt),
-    updatedAt: dateToString(booking._doc.updatedAt)
+    date: dateToString(booking._doc.date),
+    // creator: user.bind(this, booking.creator)
+  };
+};
+
+const transformConfirmedBooking = confirmedBooking => {
+  return {
+    ...confirmedBooking._doc,
+    user: user.bind(this, confirmedBooking._doc.user),
+    booking: singleBooking.bind(this, confirmedBooking._doc.booking),
+    createdAt: dateToString(confirmedBooking._doc.createdAt),
+    updatedAt: dateToString(confirmedBooking._doc.updatedAt)
   }
 }
 
-exports.transformEvent = transformEvent;
 exports.transformBooking = transformBooking;
+exports.transformConfirmedBooking = transformConfirmedBooking;

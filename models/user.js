@@ -11,10 +11,16 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  createdEvents: [
+  confirmed: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Event'
+      ref: 'ConfirmedBooking'
+    }
+  ],
+  bookingHistory: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'ConfirmedBooking'
     }
   ]
 });
