@@ -6,7 +6,7 @@ const User = require('../../models/user');
 module.exports = {
   createUser: async ({ userInput: { email, password } }) => {
     try {
-      //check if the email already exists in the database
+      // check if the email already exists in the database
       const existingUser = await User.findOne({ email: email })
 
       if (existingUser) {
@@ -42,13 +42,14 @@ module.exports = {
     if (!isEqual) {
       throw new Error('Password is incorrect!');
     }
-    // successful authentication credentials
+    // sign authentication credentials
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.AUTH_SECRET,
       { expiresIn: '1h' }
     );
 
+    // return the token
     return { userId: user.id, token: token, tokenExpiration: 1, email: email }
   }
 }
