@@ -28,10 +28,11 @@ module.exports = {
       throw err;
     }
   },
-  createBooking: async ({ bookingInput: { fullname, phone, date, service, comment }}, req) => {
+  createBooking: async ({ bookingInput: { fullname, phone, email, date, service, comment }}, req) => {
     const booking = new Booking({
       fullname: fullname,
       phone: phone,
+      email: email,
       date: new Date(date),
       service: service,
       comment: comment,

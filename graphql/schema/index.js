@@ -5,6 +5,7 @@ module.exports = buildSchema(`
     _id: ID!
     fullname: String!
     phone: String!
+    email: String!
     date: String!
     service: String!
     comment: String!
@@ -32,6 +33,7 @@ module.exports = buildSchema(`
   input BookingInput {
     fullname: String!
     phone: String!
+    email: String!
     date: String!
     service: String!
     comment: String!
