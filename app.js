@@ -40,12 +40,11 @@ console.log(process.env.MONGODB_PASSWORD);
 console.log(process.env.MONGODB_NAME);
 
 mongoose.connect(
-    `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@cluster0.iniwj.mongodb.net/${process.env.MONGODB_NAME}?retryWrites=true&w=majority
-    `
-  )
-  .then(() => {
-    app.listen(process.env.PORT);
-  })
-  .catch(err => {
-    console.log(err);
-  });
+  process.env.MONGODB_URI
+)
+.then(() => {
+  app.listen(process.env.PORT);
+})
+.catch(err => {
+  console.log(err);
+});
